@@ -6,6 +6,11 @@ import urllib2
 import optparse
 import time
 
+VERSION = """%prog 0.1b by Thomas Upton
+
+Use `%prog -h` for help and a list of options.
+"""
+
 PASTEBIN_API = "http://pastebin.com/api_public.php"
 
 def copy_text(text):
@@ -22,7 +27,8 @@ def create_opt_parser():
     Creates an option parser using optparse
     """
 
-    parser = optparse.OptionParser("Paste text to pastebin.com")
+    parser = optparse.OptionParser(usage="%prog [-hc] [-f file]", epilog="Paste text to pastebin.com.",
+            version=VERSION)
 
     parser.add_option('-c', '--copy', default=False, action='store_true',
             help="copy the text that is posted to pastebin.com before copying the pastebin.com URL")
