@@ -57,7 +57,7 @@ def main(argv):
     opts, args = parser.parse_args(argv)
 
     if opts.file != False:
-        file = open(args.file, 'r')
+        file = open(opts.file, 'r')
     else:
         file = sys.stdin
 
