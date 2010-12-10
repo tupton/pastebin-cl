@@ -17,7 +17,7 @@ Use [pastebin][pb] from the commandline.
 
 I find it useful to put the script where it is readily available, like so:
 
-    $ ln -s ~/path/to/script/pastebin.sh /usr/local/bin/pastebin
+    $ ln -s ~/path/to/script/pastebin.py /usr/local/bin/pastebin
     
 Obviously, replace `path/to/script` (and/or `/usr/local/bin/`) with the appropriate paths.
 
