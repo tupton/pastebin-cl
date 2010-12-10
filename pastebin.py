@@ -4,6 +4,7 @@ import sys
 import os
 import urllib2
 import optparse
+import time
 
 PASTEBIN_API = "http://pastebin.com/api_public.php"
 
@@ -12,8 +13,9 @@ def copy_text(text):
     Copy text to the OS X system clipboard
     """
 
-    command = "echo \"" + text + "\" | pbcopy"
-    os.system(command)
+    out = os.popen('pbcopy', 'w')
+    out.write(text)
+    out.close()
 
 def create_opt_parser():
     """
