@@ -19,3 +19,6 @@ clipboard manager like [Jumpcut][jc].
 
 [jc]: http://jumpcut.sourceforge.net/
 
+After the workflow is installed, you need to make sure it is active. Open *Keyboard Shortcuts* in *System Preferences*, then find the "Paste to pastebin.com" service under Services in the left menu. Make sure there is a check next to this service.
+
+Now you can select text in any OS X application and use the pastebin service.
