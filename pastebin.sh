@@ -46,5 +46,5 @@ if [ $PASTEBIN_COPY = 1 ]; then
     sleep .5
 fi
 
-curl -s -X POST -d $PASTEBIN_TO_PASTE $PASTEBIN_API | pbcopy
+curl -s -X POST -d "$PASTEBIN_TO_PASTE" $PASTEBIN_API | pbcopy
 
