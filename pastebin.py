@@ -33,9 +33,9 @@ def paste_to_pastebin(lines):
     """
     Post the given text to pastebin and return the response from the api
     """
+
     to_paste = "paste_code=" + lines
-    request = urllib2.Request(url=PASTEBIN_API,
-                          data=to_paste)
+    request = urllib2.Request(url=PASTEBIN_API, data=to_paste)
     response = urllib2.urlopen(request)
     pastebin = response.read()
     return pastebin
