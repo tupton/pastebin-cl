@@ -9,7 +9,8 @@ assumes the pastebin script is in `/usr/local/bin/pastebin`. You can alias the s
          
 Obviously, replace `path/to/script` (and/or `/usr/local/bin/`) with the appropriate paths.
 
-Next, you need to place the workflow where the Services menu can see it. Move the workflow to
+Next, you need to place the workflow where the Services menu can see it. Simply double-clicking the
+workflow and saving it should suffice.If you want to do it manually, move the workflow to
 `~/Library/Services/`. You may have to open the workflow and resave it in order for the Services
 menu to be aware of the new workflow.
 
@@ -19,6 +20,8 @@ clipboard manager like [Jumpcut][jc].
 
 [jc]: http://jumpcut.sourceforge.net/
 
-After the workflow is installed, you need to make sure it is active. Open *Keyboard Shortcuts* in *System Preferences*, then find the "Paste to pastebin.com" service under Services in the left menu. Make sure there is a check next to this service.
+After the workflow is installed, you need to make sure it is active. Open *Keyboard Shortcuts* in
+*System Preferences*, then find the "Paste to pastebin.com" service under Services in the left menu.
+Make sure there is a check next to this service.
 
 Now you can select text in any OS X application and use the pastebin service.
