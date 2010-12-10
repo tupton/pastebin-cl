@@ -1,9 +1,9 @@
-#! /usr/local/bin/python2.7
+#! /usr/bin/env python
 
 import sys
 import os
 import urllib2
-import argparse
+import optparse
 
 PASTEBIN_API = "http://pastebin.com/api_public.php"
 
@@ -11,18 +11,21 @@ def copy_text(text):
     """
     Copy text to the OS X system clipboard
     """
+
     command = "echo \"" + text + "\" | pbcopy"
     os.system(command)
 
-def create_arg_parser():
+def create_opt_parser():
     """
-    Creates an argument parser.
+    Creates an option parser using optparse
     """
-    parser = argparse.ArgumentParser(description="Paste text to pastebin.com")
-    parser.add_argument('-c', '--copy', default=False , action='store_true',
-            help="Copy the text that's posted to pastebin.com before copying the pastebin URL")
-    parser.add_argument('-f', '--file', default=False , action='store',
-            help="Read from %(dest)s instead of STDIN")
+
+    parser = optparse.OptionParser("Paste text to pastebin.com")
+
+    parser.add_option('-c', '--copy', default=False, action='store_true',
+            help="copy the text that is posted to pastebin.com before copying the pastebin.com URL")
+    parser.add_option('-f', '--file', default=False, action='store',
+            help="read from FILE instead of stdin")
 
     return parser
 
@@ -42,17 +45,17 @@ def main(argv):
     Parse the command lines options and paste the given text to pastebin.com
     """
 
-    parser = create_arg_parser()
-    args = parser.parse_args(argv)
+    parser = create_opt_parser()
+    opts, args = parser.parse_args(argv)
 
-    if args.file != False:
+    if opts.file != False:
         file = open(args.file, 'r')
     else:
         file = sys.stdin
 
     lines = "".join(file.readlines())
 
-    if args.copy == True:
+    if opts.copy == True:
         copy_text(lines)
 
     pastebin_response = paste_to_pastebin(lines)
