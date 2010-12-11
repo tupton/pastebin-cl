@@ -112,6 +112,9 @@ class Pastebin(object):
         if self.get_paste_name() is not None:
             params['paste_name'] = self.get_paste_name()
 
+        if self.get_paste_email() is not None:
+            params['paste_email'] = self.get_paste_email()
+
         if self.get_paste_subdomain() is not None:
             params['paste_subdomain'] = self.get_paste_subdomain()
 
