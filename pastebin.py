@@ -82,7 +82,7 @@ class Pastebin(object):
 
     def get_paste_private(self):
         paste_private = "0"
-        if self._paste_private == True:
+        if self._paste_private is True:
             paste_private = "1"
 
         return paste_private
