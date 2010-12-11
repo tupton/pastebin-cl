@@ -6,7 +6,7 @@ import urllib2
 import optparse
 import time
 
-VERSION = """%prog 0.1b by Thomas Upton
+VERSION = """%prog 0.2 by Thomas Upton
 
 Use `%prog -h` for help and a list of options.
 """
