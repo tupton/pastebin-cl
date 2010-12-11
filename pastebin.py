@@ -146,18 +146,37 @@ def create_opt_parser():
             version=VERSION)
 
     parser.add_option('-c', '--copy', default=False, action='store_true',
-            help="copy the text that is posted to pastebin.com before copying the pastebin.com URL")
+            help="copy the text that is posted to pastebin.com before copying the pastebin.com URL.")
     parser.add_option('-f', '--file', default=False, action='store',
-            help="read from FILE instead of stdin")
+            help="read from FILE instead of stdin.")
+
+    # pastebin API options
+    pastebin_api_group = optparse.OptionGroup(parser, "Pastebin API Options",
+        "These options are passed to the pastebin API request.")
+    pastebin_api_group.add_option('--paste-name', default=None, action='store',
+            help="The name to give to the pasted text.")
+    pastebin_api_group.add_option('--paste-email', default=None, action='store',
+            help="The email to send a confirmation with a paste link.")
+    pastebin_api_group.add_option('--paste-subdomain', default=None, action='store',
+            help="The subdomain (e.g. http://subdomain.pastebin.com) to use when pasting.")
+    pastebin_api_group.add_option('--paste-private', default=False, action='store_true',
+            help="Whether to make the paste private.")
+    pastebin_api_group.add_option('--paste-expire-date', default=None, action='store',
+            help="When to expire the paste. Valid values are N, 10M, 1H, 1D, and 1M.")
+    pastebin_api_group.add_option('--paste-format', default=None, action='store',
+            help="The format used for syntax highlighting. See http://pastebin.com/api.php for valid values.")
+    parser.add_option_group(pastebin_api_group)
 
     return parser
 
-def paste_to_pastebin(lines):
+def paste_to_pastebin(lines, opts):
     """
     Post the given text to pastebin and return the response from the api
     """
 
-    pastebin = Pastebin(paste_code=lines)
+    pastebin = Pastebin(paste_code=lines, paste_name=opts.paste_name, paste_email=opts.paste_email,
+            paste_subdomain=opts.paste_subdomain, paste_private=opts.paste_private,
+            paste_expire_date=opts.paste_expire_date, paste_format=opts.paste_format)
     response = pastebin.paste()
     return response
 
@@ -179,7 +198,7 @@ def main(argv):
     if opts.copy == True:
         copy_text(lines)
 
-    pastebin_response = paste_to_pastebin(lines)
+    pastebin_response = paste_to_pastebin(lines, opts)
     copy_text(pastebin_response)
 
 if __name__ == '__main__':
