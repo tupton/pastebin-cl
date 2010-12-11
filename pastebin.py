@@ -142,29 +142,33 @@ def create_opt_parser():
     Creates an option parser using optparse
     """
 
-    parser = optparse.OptionParser(usage="%prog [-hc] [-f file]", epilog="Paste text to pastebin.com.",
+    parser = optparse.OptionParser(usage="""usage: pastebin.py [-h] [-v] [-c] [-f FILE] [--paste-name PASTE_NAME]
+                       [--paste-email PASTE_EMAIL]
+                       [--paste-subdomain PASTE_SUBDOMAIN] [--paste-private]
+                       [--paste-expire-date PASTE_EXPIRE_DATE]
+                       [--paste-format PASTE_FORMAT]""", epilog="Paste text to pastebin.com.",
             version=VERSION)
 
     parser.add_option('-c', '--copy', default=False, action='store_true',
-            help="copy the text that is posted to pastebin.com before copying the pastebin.com URL.")
+            help="copy the text that is posted to pastebin.com before copying the pastebin.com URL")
     parser.add_option('-f', '--file', default=False, action='store',
-            help="read from FILE instead of stdin.")
+            help="read from FILE instead of stdin")
 
     # pastebin API options
     pastebin_api_group = optparse.OptionGroup(parser, "Pastebin API Options",
         "These options are passed to the pastebin API request.")
     pastebin_api_group.add_option('--paste-name', default=None, action='store',
-            help="The name to give to the pasted text.")
+            help="the name to give to the pasted text")
     pastebin_api_group.add_option('--paste-email', default=None, action='store',
-            help="The email to send a confirmation with a paste link.")
+            help="the email to send a confirmation with a paste link")
     pastebin_api_group.add_option('--paste-subdomain', default=None, action='store',
-            help="The subdomain (e.g. http://subdomain.pastebin.com) to use when pasting.")
+            help="the subdomain (e.g. http://subdomain.pastebin.com) to use when pasting")
     pastebin_api_group.add_option('--paste-private', default=False, action='store_true',
-            help="Whether to make the paste private.")
+            help="whether to make the paste private")
     pastebin_api_group.add_option('--paste-expire-date', default=None, action='store',
-            help="When to expire the paste. Valid values are N, 10M, 1H, 1D, and 1M.")
+            help="when to expire the paste; valid values are N, 10M, 1H, 1D, and 1M")
     pastebin_api_group.add_option('--paste-format', default=None, action='store',
-            help="The format used for syntax highlighting. See http://pastebin.com/api.php for valid values.")
+            help="the format used for syntax highlighting; see http://pastebin.com/api.php for valid values")
     parser.add_option_group(pastebin_api_group)
 
     return parser

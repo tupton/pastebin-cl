@@ -7,13 +7,36 @@ Use [pastebin][pb] from the commandline.
 
 ## USAGE
 
-    pastebin [-ch] [-f filename]
+    Usage: pastebin.py [-h] [-v] [-c] [-f FILE] [--paste-name PASTE_NAME]
+                           [--paste-email PASTE_EMAIL]
+                           [--paste-subdomain PASTE_SUBDOMAIN] [--paste-private]
+                           [--paste-expire-date PASTE_EXPIRE_DATE]
+                           [--paste-format PASTE_FORMAT]
 
-        -c  Copy the text that is pasted to the pastebin before copying the pastebin.com url.
+    Options:
+      --version             show program's version number and exit
+      -h, --help            show this help message and exit
+      -c, --copy            copy the text that is posted to pastebin.com before
+                            copying the pastebin.com URL
+      -f FILE, --file=FILE  read from FILE instead of stdin
 
-        -f  Read from FILENAME instead of from STDIN
+      Pastebin API Options:
+        These options are passed to the pastebin API request.
 
-        -h  Print this help message
+        --paste-name=PASTE_NAME
+                            the name to give to the pasted text
+        --paste-email=PASTE_EMAIL
+                            the email to send a confirmation with a paste link
+        --paste-subdomain=PASTE_SUBDOMAIN
+                            the subdomain (e.g. http://subdomain.pastebin.com) to
+                            use when pasting
+        --paste-private     whether to make the paste private
+        --paste-expire-date=PASTE_EXPIRE_DATE
+                            when to expire the paste; valid values are N, 10M, 1H,
+                            1D, and 1M
+        --paste-format=PASTE_FORMAT
+                            the format used for syntax highlighting; see
+                            http://pastebin.com/api.php for valid values
 
 I find it useful to put the script where it is readily available, like so:
 
