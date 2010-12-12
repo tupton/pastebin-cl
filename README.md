@@ -1,8 +1,10 @@
 # PASTEBIN-CL
 
-Use [pastebin][pb] from the commandline.
+Use [pastebin][pb] from the commandline. See [the blog post][bp] for information on how this script came
+to be and to leave any comments or questions.
 
 [pb]: http://pastebin.com/
+[bp]: http://www.thomasupton.com/blog/2010/12/pastebin-from-the-commandline/
 
 
 ## USAGE
