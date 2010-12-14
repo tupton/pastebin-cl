@@ -43,7 +43,7 @@ to be and to leave any comments or questions.
 I find it useful to put the script where it is readily available, like so:
 
     $ ln -s ~/path/to/script/pastebin.py /usr/local/bin/pastebin
-    
+
 Obviously, replace `path/to/script` (and/or `/usr/local/bin/`) with the appropriate paths.
 
 Use `-c` to copy the contents of what is being posted first. This is useful if you are using a clipboard manager that can handle multiple items, such as [Jumpcut][jc].
