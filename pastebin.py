@@ -153,6 +153,8 @@ def create_opt_parser():
             help="copy the text that is posted to pastebin.com before copying the pastebin.com URL")
     parser.add_option('-f', '--file', default=False, action='store',
             help="read from FILE instead of stdin")
+    parser.add_option('-p', '--print-response', default=False, action='store',
+            help="print the response from the pastebin API instead of copying it to the clipboard")
 
     # pastebin API options
     pastebin_api_group = optparse.OptionGroup(parser, "Pastebin API Options",
@@ -203,7 +205,11 @@ def main(argv):
         copy_text(lines)
 
     pastebin_response = paste_to_pastebin(lines, opts)
-    copy_text(pastebin_response)
+
+    if opts.print_response:
+        print pastebin_response
+    else:
+        copy_text(pastebin_response)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
