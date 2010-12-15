@@ -201,7 +201,7 @@ def main(argv):
 
     lines = "".join(file.readlines())
 
-    if opts.copy:
+    if opts.copy_text:
         copy_text(lines)
 
     pastebin_response = paste_to_pastebin(lines, opts)
