@@ -149,7 +149,7 @@ def create_opt_parser():
                        [--paste-format PASTE_FORMAT]""", epilog="Paste text to pastebin.com.",
             version=VERSION)
 
-    parser.add_option('-c', '--copy', default=False, action='store_true',
+    parser.add_option('-c', '--copy-text', default=False, action='store_true',
             help="copy the text that is posted to pastebin.com before copying the pastebin.com URL")
     parser.add_option('-f', '--file', default=False, action='store',
             help="read from FILE instead of stdin")
@@ -201,7 +201,7 @@ def main(argv):
 
     lines = "".join(file.readlines())
 
-    if opts.copy == True:
+    if opts.copy:
         copy_text(lines)
 
     pastebin_response = paste_to_pastebin(lines, opts)
