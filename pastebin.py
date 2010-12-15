@@ -142,7 +142,7 @@ def create_opt_parser():
     Creates an option parser using optparse
     """
 
-    parser = optparse.OptionParser(usage="""usage: pastebin.py [-h] [-v] [-c] [-f FILE] [--paste-name PASTE_NAME]
+    parser = optparse.OptionParser(usage="""usage: pastebin.py [-h] [-v] [-cp] [-f FILE] [--paste-name PASTE_NAME]
                        [--paste-email PASTE_EMAIL]
                        [--paste-subdomain PASTE_SUBDOMAIN] [--paste-private]
                        [--paste-expire-date PASTE_EXPIRE_DATE]

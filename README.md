@@ -9,7 +9,7 @@ to be and to leave any comments or questions.
 
 ## USAGE
 
-    Usage: pastebin.py [-h] [-v] [-c] [-f FILE] [--paste-name PASTE_NAME]
+    Usage: pastebin.py [-h] [-v] [-cp] [-f FILE] [--paste-name PASTE_NAME]
                            [--paste-email PASTE_EMAIL]
                            [--paste-subdomain PASTE_SUBDOMAIN] [--paste-private]
                            [--paste-expire-date PASTE_EXPIRE_DATE]
@@ -21,6 +21,9 @@ to be and to leave any comments or questions.
       -c, --copy            copy the text that is posted to pastebin.com before
                             copying the pastebin.com URL
       -f FILE, --file=FILE  read from FILE instead of stdin
+      -p, --print-response  print the response from the pastebin API instead of
+                            copying it to the clipboard
+
 
       Pastebin API Options:
         These options are passed to the pastebin API request.
