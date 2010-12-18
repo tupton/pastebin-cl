@@ -5,6 +5,7 @@ import os
 import urllib2
 import optparse
 import time
+from subprocess import Popen, PIPE
 
 VERSION = """%prog 0.2 by Thomas Upton
 
@@ -130,12 +131,31 @@ class Pastebin(object):
 
 def copy_text(text):
     """
-    Copy text to the OS X system clipboard
+    Copy text to the system clipboard
     """
 
-    out = os.popen('pbcopy', 'w')
-    out.write(text)
-    out.close()
+    cb_name = get_clipboard_name()
+
+    if cb_name is not None:
+        clipboard = Popen(cb_name, shell=True, stdin=PIPE).stdin()
+        clipboard.write(text)
+        clipboard.close()
+
+def get_clipboard_name():
+    """Get the name of the system clipboard"""
+
+    cb_list = ['pbcopy', 'xclip', 'putclip']
+    cb_test = 'type %s >> /dev/null 2>&1'
+
+    cb_name = None
+    for cb in cb_list:
+        process = Popen(cb_test % cb, shell=True, stdout=PIPE)
+        process.stdout.close()
+        if not process.wait():
+            cb_name = cb
+            break
+
+    return cb_name
 
 def create_opt_parser():
     """
