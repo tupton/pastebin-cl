@@ -2,6 +2,7 @@
 
 import sys
 import os
+import urllib
 import urllib2
 import optparse
 import time
@@ -127,7 +128,9 @@ class Pastebin(object):
         if self.get_paste_format() is not None:
             params['paste_format'] = self.get_paste_format()
 
-        return "&".join([k + "=" + str(v) for (k, v) in params.iteritems()])
+        encoded = urllib.urlencode([(k, v) for (k, v) in params.iteritems()])
+        print encoded
+        return encoded
 
 def copy_text(text):
     """
