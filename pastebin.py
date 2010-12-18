@@ -137,7 +137,7 @@ def copy_text(text):
     cb_name = get_clipboard_name()
 
     if cb_name is not None:
-        clipboard = Popen(cb_name, shell=True, stdin=PIPE).stdin()
+        clipboard = Popen(cb_name, shell=True, stdin=PIPE).stdin
         clipboard.write(text)
         clipboard.close()
 
