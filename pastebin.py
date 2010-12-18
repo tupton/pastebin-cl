@@ -129,7 +129,6 @@ class Pastebin(object):
             params['paste_format'] = self.get_paste_format()
 
         encoded = urllib.urlencode([(k, v) for (k, v) in params.iteritems()])
-        print encoded
         return encoded
 
 def copy_text(text):
