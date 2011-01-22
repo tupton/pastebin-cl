@@ -206,6 +206,22 @@ def create_opt_parser():
 
     return parser
 
+def growl_notify(pastebin_response):
+    """Use Growl via Applescript to create a notification with pastebin's response."""
+
+    if not cli_exists('osascript'):
+        return
+
+    applescript = """tell application "GrowlHelperApp"
+set allNotificationsList to {"Pastebin Notification"}
+set enabledNotificationsList to {"Pastebin Notification"}
+register as application "Pastebin Commandline" all notifications allNotificationsList default notifications enabledNotificationsList icon of application "Script Editor"
+notify with name "Pastebin Notification" title "Pastebin" description "%s" application name "Pastebin Commandline"
+end tell""" % pastebin_response
+
+    osascript = Popen("osascript -e '" + applescript + "'", shell=True)
+    osascript.communicate() 
+
 def paste_to_pastebin(lines, opts):
     """
     Post the given text to pastebin and return the response from the api
@@ -236,6 +252,8 @@ def main(argv):
         copy_text(lines)
 
     pastebin_response = paste_to_pastebin(lines, opts)
+
+    growl_notify(pastebin_response)
 
     if opts.print_response:
         print pastebin_response
