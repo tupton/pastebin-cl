@@ -147,17 +147,26 @@ def get_clipboard_name():
     """Get the name of the system clipboard"""
 
     cb_list = ['pbcopy', 'xclip', 'putclip']
-    cb_test = 'type %s >> /dev/null 2>&1'
 
     cb_name = None
     for cb in cb_list:
-        process = Popen(cb_test % cb, shell=True, stdout=PIPE)
-        process.stdout.close()
-        if not process.wait():
+        if cli_exists(cb):
             cb_name = cb
             break
 
     return cb_name
+
+def cli_exists(command):
+    """Determine whether or not a command line command exists"""
+    exists = False
+
+    test = 'type %s >> /dev/null 2>&1' % command
+    process = Popen(test, shell=True, stdout=PIPE)
+    process.stdout.close()
+    if not process.wait():
+        exists = True
+
+    return exists
 
 def create_opt_parser():
     """
