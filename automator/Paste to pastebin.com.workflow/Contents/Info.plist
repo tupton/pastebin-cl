@@ -5,6 +5,13 @@
 	<key>NSServices</key>
 	<array>
 		<dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Paste to pastebin.com</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>runWorkflowAsService</string>
 			<key>NSSendTypes</key>
 			<array>
 				<string>public.utf8-plain-text</string>
