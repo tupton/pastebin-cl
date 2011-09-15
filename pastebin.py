@@ -25,18 +25,23 @@ class Pastebin(object):
     PASTEBIN_EXPIRE = [PASTEBIN_EXPIRE_NEVER, PASTEBIN_EXPIRE_TEN_MINUTES, PASTEBIN_EXPIRE_ONE_HOUR,
             PASTEBIN_EXPIRE_ONE_DAY, PASTEBIN_EXPIRE_ONE_MONTH]
 
-    pastebin_api = "http://pastebin.com/api_public.php"
+    PASTEBIN_USER_KEY_CACHE = '.pastebin_user_key_cache'
 
-    def __init__(self, paste_code, paste_name=None, paste_email=None, paste_subdomain=None,
-            paste_private=False, paste_expire_date=PASTEBIN_EXPIRE_NEVER, paste_format=None):
+    pastebin_api = "http://pastebin.com/api/api_post.php"
+    pastebin_user_api = "http://pastebin.com/api/api_login.php"
+    pastebin_dev_key = "564b1c623712f731a96c7820dff4ab9f"
+
+    def __init__(self, paste_code, paste_name=None, paste_private=False,
+            paste_expire_date=PASTEBIN_EXPIRE_NEVER, paste_format=None, username=None,
+            password=None):
 
         self.set_paste_code(paste_code)
         self.set_paste_name(paste_name)
-        self.set_paste_email(paste_email)
-        self.set_paste_subdomain(paste_subdomain)
         self.set_paste_private(paste_private)
         self.set_paste_expire_date(paste_expire_date)
         self.set_paste_format(paste_format)
+        self.set_username(username)
+        self.set_password(password)
 
     def paste(self):
         """Submit the paste request to pastebin"""
@@ -52,12 +57,6 @@ class Pastebin(object):
     def set_paste_name(self, paste_name):
         self._paste_name = paste_name
 
-    def set_paste_email(self, paste_email):
-        self._paste_email = paste_email
-
-    def set_paste_subdomain(self, paste_subdomain):
-        self._paste_subdomain = paste_subdomain
-
     def set_paste_private(self, paste_private):
         paste_private = paste_private == True
         self._paste_private = paste_private
@@ -70,17 +69,17 @@ class Pastebin(object):
     def set_paste_format(self, paste_format):
         self._paste_format = paste_format
 
+    def set_username(self, username):
+        self._username = username
+
+    def set_password(self, password):
+        self._password = password
+
     def get_paste_code(self):
         return self._paste_code
 
     def get_paste_name(self):
         return self._paste_name
-
-    def get_paste_email(self):
-        return self._paste_email
-
-    def get_paste_subdomain(self):
-        return self._paste_subdomain
 
     def get_paste_private(self):
         paste_private = "0"
@@ -95,41 +94,104 @@ class Pastebin(object):
     def get_paste_format(self):
         return self._paste_format
 
+    def get_username(self):
+        return self._username
+
+    def get_password(self):
+        return self._password
+
     def _build_request(self):
 
         request_url = self.pastebin_api
-        request_data = self._build_param_string()
+
+        user_key = self._get_user_key()
+
+        request_data = self._build_param_string(user_key)
 
         return urllib2.Request(url=request_url, data=request_data)
 
-    def _build_param_string(self):
+    def _build_param_string(self, user_key):
 
         params = dict()
 
         if not self.get_paste_code():
             raise Exception, "No paste_code was given"
 
-        params['paste_code'] = self.get_paste_code()
+        params['api_option'] = 'paste'
+        params['api_dev_key'] = self.pastebin_dev_key
+        params['api_paste_code'] = self.get_paste_code()
 
         if self.get_paste_name() is not None:
-            params['paste_name'] = self.get_paste_name()
-
-        if self.get_paste_email() is not None:
-            params['paste_email'] = self.get_paste_email()
-
-        if self.get_paste_subdomain() is not None:
-            params['paste_subdomain'] = self.get_paste_subdomain()
+            params['api_paste_name'] = self.get_paste_name()
 
         if self.get_paste_private() != "0":
-            params['paste_private'] = self.get_paste_private()
+            params['api_paste_private'] = self.get_paste_private()
 
-        params['paste_expire_date'] = self.get_paste_expire_date()
+        params['api_paste_expire_date'] = self.get_paste_expire_date()
 
         if self.get_paste_format() is not None:
-            params['paste_format'] = self.get_paste_format()
+            params['api_paste_format'] = self.get_paste_format()
 
+        if user_key is not None:
+            params['api_user_key'] = user_key
+
+        return self._encode_params(params)
+
+    def _build_user_param_string(self):
+
+        params = dict()
+
+        params['api_user_name'] = self.get_username()
+        params['api_user_password'] = self.get_password()
+        params['api_dev_key'] = self.pastebin_dev_key
+
+        return self._encode_params(params)
+
+    def _encode_params(self, params):
         encoded = urllib.urlencode([(k, v) for (k, v) in params.iteritems()])
         return encoded
+
+    def _get_user_key(self):
+        username = self.get_username()
+        password = self.get_password()
+
+        user_key = None
+        if username is not None and password is not None:
+            user_key = self._get_user_key_from_cache(username)
+
+            if user_key is None:
+                user_request_url = self.pastebin_user_api
+                user_request_data = self._build_user_param_string()
+                user_request = urllib2.Request(url=user_request_url, data=user_request_data)
+                user_response = urllib2.urlopen(user_request)
+                user_key = user_response.read()
+                self._put_user_key_in_cache(username, user_key)
+
+        return user_key
+
+    def _get_user_key_from_cache(self, username):
+        user_key = None
+
+        try:
+            cache = open(self.PASTEBIN_USER_KEY_CACHE, 'r')
+        except IOError:
+            cache = open(self.PASTEBIN_USER_KEY_CACHE, 'w')
+            cache.close()
+            cache = open(self.PASTEBIN_USER_KEY_CACHE, 'r')
+
+        for line in cache:
+            parts = line.split()
+            if len(parts) == 2 and parts[0] == username:
+                user_key = parts[1]
+        
+        cache.close()
+        return user_key
+
+    def _put_user_key_in_cache(self, username, user_key):
+        cache = open('.pastebin_user_key_cache', 'a')
+        cache.write(' '.join([username, user_key]))
+        cache.write('\n')
+        cache.close()
 
 def copy_text(text):
     """
@@ -174,10 +236,10 @@ def create_opt_parser():
     """
 
     parser = optparse.OptionParser(usage="""usage: pastebin.py [-h] [-v] [-cp] [-f FILE] [--paste-name PASTE_NAME]
-                       [--paste-email PASTE_EMAIL]
-                       [--paste-subdomain PASTE_SUBDOMAIN] [--paste-private]
                        [--paste-expire-date PASTE_EXPIRE_DATE]
-                       [--paste-format PASTE_FORMAT]""", epilog="Paste text to pastebin.com.",
+                       [--paste-format PASTE_FORMAT]
+                       [--username USERNAME]
+                       [--password PASSWORD]""", epilog="Paste text to pastebin.com.",
             version=VERSION)
 
     parser.add_option('-c', '--copy-text', default=False, action='store_true',
@@ -192,16 +254,16 @@ def create_opt_parser():
         "These options are passed to the pastebin API request.")
     pastebin_api_group.add_option('--paste-name', default=None, action='store',
             help="the name to give to the pasted text")
-    pastebin_api_group.add_option('--paste-email', default=None, action='store',
-            help="the email to send a confirmation with a paste link")
-    pastebin_api_group.add_option('--paste-subdomain', default=None, action='store',
-            help="the subdomain (e.g. http://subdomain.pastebin.com) to use when pasting")
     pastebin_api_group.add_option('--paste-private', default=False, action='store_true',
             help="whether to make the paste private")
     pastebin_api_group.add_option('--paste-expire-date', default=None, action='store',
             help="when to expire the paste; valid values are N, 10M, 1H, 1D, and 1M")
     pastebin_api_group.add_option('--paste-format', default=None, action='store',
             help="the format used for syntax highlighting; see http://pastebin.com/api.php for valid values")
+    pastebin_api_group.add_option('--username', default=None, action='store',
+            help="your pastebin.com username")
+    pastebin_api_group.add_option('--password', default=None, action='store',
+            help="your pastebin.com password")
     parser.add_option_group(pastebin_api_group)
 
     return parser
@@ -227,9 +289,9 @@ def paste_to_pastebin(lines, opts):
     Post the given text to pastebin and return the response from the api
     """
 
-    pastebin = Pastebin(paste_code=lines, paste_name=opts.paste_name, paste_email=opts.paste_email,
-            paste_subdomain=opts.paste_subdomain, paste_private=opts.paste_private,
-            paste_expire_date=opts.paste_expire_date, paste_format=opts.paste_format)
+    pastebin = Pastebin(paste_code=lines, paste_name=opts.paste_name,
+            paste_private=opts.paste_private, paste_expire_date=opts.paste_expire_date,
+            paste_format=opts.paste_format, username=opts.username, password=opts.password)
     response = pastebin.paste()
     return response
 
