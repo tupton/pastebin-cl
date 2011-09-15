@@ -8,7 +8,7 @@ import optparse
 import time
 from subprocess import Popen, PIPE
 
-VERSION = """%prog 0.2 by Thomas Upton
+VERSION = """%prog 0.6 by Thomas Upton
 
 Use `%prog -h` for help and a list of options.
 """
