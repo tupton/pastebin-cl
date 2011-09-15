@@ -10,31 +10,25 @@ to be and to leave any comments or questions.
 ## USAGE
 
     Usage: pastebin.py [-h] [-v] [-cp] [-f FILE] [--paste-name PASTE_NAME]
-                           [--paste-email PASTE_EMAIL]
-                           [--paste-subdomain PASTE_SUBDOMAIN] [--paste-private]
                            [--paste-expire-date PASTE_EXPIRE_DATE]
                            [--paste-format PASTE_FORMAT]
+                           [--username USERNAME]
+                           [--password PASSWORD]
 
     Options:
       --version             show program's version number and exit
       -h, --help            show this help message and exit
-      -c, --copy            copy the text that is posted to pastebin.com before
+      -c, --copy-text       copy the text that is posted to pastebin.com before
                             copying the pastebin.com URL
       -f FILE, --file=FILE  read from FILE instead of stdin
       -p, --print-response  print the response from the pastebin API instead of
                             copying it to the clipboard
-
 
       Pastebin API Options:
         These options are passed to the pastebin API request.
 
         --paste-name=PASTE_NAME
                             the name to give to the pasted text
-        --paste-email=PASTE_EMAIL
-                            the email to send a confirmation with a paste link
-        --paste-subdomain=PASTE_SUBDOMAIN
-                            the subdomain (e.g. http://subdomain.pastebin.com) to
-                            use when pasting
         --paste-private     whether to make the paste private
         --paste-expire-date=PASTE_EXPIRE_DATE
                             when to expire the paste; valid values are N, 10M, 1H,
@@ -42,12 +36,16 @@ to be and to leave any comments or questions.
         --paste-format=PASTE_FORMAT
                             the format used for syntax highlighting; see
                             http://pastebin.com/api.php for valid values
+        --username=USERNAME
+                            your pastebin.com username
+        --password=PASSWORD
+                            your pastebin.com password
 
 I find it useful to put the script where it is readily available, like so:
 
     $ ln -s ~/path/to/script/pastebin.py /usr/local/bin/pastebin
 
-Obviously, replace `path/to/script` (and/or `/usr/local/bin/`) with the appropriate paths.
+Obviously, replace `path/to/script` (and/or `/usr/local/bin/`) with the appropriate paths. If you use the `username` and `password` options, a cache file called `.pastebin_user_key_cache` will be created in the same directory that the script is running in.
 
 Use `-c` to copy the contents of what is being posted first. This is useful if you are using a clipboard manager that can handle multiple items, such as [Jumpcut][jc].
 
