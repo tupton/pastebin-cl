@@ -188,7 +188,7 @@ class Pastebin(object):
         return user_key
 
     def _put_user_key_in_cache(self, username, user_key):
-        cache = open('.pastebin_user_key_cache', 'a')
+        cache = open(self.PASTEBIN_USER_KEY_CACHE, 'a')
         cache.write(' '.join([username, user_key]))
         cache.write('\n')
         cache.close()
