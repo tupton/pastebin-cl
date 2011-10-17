@@ -279,8 +279,6 @@ def growl_notify(pastebin_response):
     growl_helper_applescript = 'tell application "System Events" to (name of processes) contains "GrowlHelperApp"'
     osascript = Popen("osascript -e '" + growl_helper_applescript + "'", shell=True, stdout=PIPE)
     stdout,stderr = osascript.communicate()
-    osascript.stdout.close();
-    osascript = None
 
     if stdout.strip() == "true":
         growl_app = 'GrowlHelperApp'
