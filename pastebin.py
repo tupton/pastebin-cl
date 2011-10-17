@@ -274,14 +274,25 @@ def growl_notify(pastebin_response):
     if not cli_exists('osascript'):
         return
 
-    applescript = """tell application "GrowlHelperApp"
+    growl_app = 'Growl'
+
+    growl_helper_applescript = 'tell application "System Events" to (name of processes) contains "GrowlHelperApp"'
+    osascript = Popen("osascript -e '" + growl_helper_applescript + "'", shell=True, stdout=PIPE)
+    stdout,stderr = osascript.communicate()
+    osascript.stdout.close();
+    osascript = None
+
+    if stdout.strip() == "true":
+        growl_app = 'GrowlHelperApp'
+
+    applescript = """ tell application "%(growl_app)s"
 set allNotificationsList to {"Pastebin Notification"}
 set enabledNotificationsList to {"Pastebin Notification"}
 register as application "Pastebin Commandline" all notifications allNotificationsList default notifications enabledNotificationsList icon of application "Script Editor"
-notify with name "Pastebin Notification" title "Pastebin" description "%s" application name "Pastebin Commandline"
-end tell""" % pastebin_response
+notify with name "Pastebin Notification" title "Pastebin" description "%(pastebin_response)s" application name "Pastebin Commandline"
+end tell """ % {'growl_app': growl_app, 'pastebin_response': pastebin_response}
 
-    osascript = Popen("osascript -e '" + applescript + "'", shell=True)
+    osascript = Popen("osascript -e '%s'" % applescript, shell=True)
     osascript.communicate() 
 
 def paste_to_pastebin(lines, opts):
