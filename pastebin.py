@@ -27,8 +27,8 @@ class Pastebin(object):
 
     PASTEBIN_USER_KEY_CACHE = '.pastebin_user_key_cache'
 
-    pastebin_api = "http://pastebin.com/api/api_post.php"
-    pastebin_user_api = "http://pastebin.com/api/api_login.php"
+    pastebin_api = "https://pastebin.com/api/api_post.php"
+    pastebin_user_api = "https://pastebin.com/api/api_login.php"
     pastebin_dev_key = "564b1c623712f731a96c7820dff4ab9f"
 
     def __init__(self, paste_code, paste_name=None, paste_private=False,
